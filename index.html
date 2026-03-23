@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Noir - Espace Tech INF 222</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-card: #16161a;
+            --primary: #00f2ff;
+            --secondary: #7000ff;
+            --text-main: #e1e1e6;
+            --text-dim: #a8a8b3;
+            --accent-glow: rgba(0, 242, 255, 0.15);
+            --border: #29292e;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Subtle grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+
+        header {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, transparent 100%);
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        header p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            margin-top: 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+        }
+
+        button {
+            background: var(--bg-card);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        button.secondary {
+            border-color: var(--secondary);
+            color: var(--secondary);
+        }
+
+        button.secondary:hover {
+            background: var(--secondary);
+            color: var(--text-main);
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            background: var(--bg-card);
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        input, select, textarea {
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 1rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        .article-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 2.5rem;
+            margin-bottom: 2.5rem;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+        }
+
+        .article-card:hover {
+            transform: translateX(10px);
+            border-color: var(--primary);
+        }
+
+        .article-card h2 {
+            font-size: 2rem;
+            margin: 1rem 0;
+            color: var(--text-main);
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .category-tag {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .date-tag {
+            color: var(--text-dim);
+        }
+
+        .article-content {
+            color: var(--text-dim);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid var(--border);
+            padding-top: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+
+        #editor {
+            display: none;
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
+            padding: 3rem;
+            margin-bottom: 4rem;
+            box-shadow: 0 0 40px var(--accent-glow);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            min-height: 200px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 5rem 2rem;
+            color: var(--text-dim);
+            font-family: 'JetBrains Mono', monospace;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Loading animation */
+        #articles-container {
+            min-height: 200px;
+        }
+
+        .glitch-text {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1 class="glitch-text">TECH NOIR</h1>
+        <p>// SYSTEM OVERRIDE - TP INF 222 // Gestionnaire d'Articles</p>
+    </header>
+
+    <div class="container">
+        <div class="nav-buttons">
+            <button onclick="prepareAdd()">+ Nouveau Signal</button>
+            <button class="secondary" onclick="window.open('/docs', '_blank')">Access_API.log</button>
+        </div>
+
+        <section class="controls">
+            <input type="text" id="searchInput" placeholder="Rechercher dans la base..." oninput="searchArticles()">
+            <select id="categoryFilter" onchange="fetchArticles()">
+                <option value="">Tous les Secteurs</option>
+                <option value="IA">Intelligence Artificielle</option>
+                <option value="Dev">Développement Web</option>
+                <option value="Cyber">Cybersécurité</option>
+                <option value="Cloud">Cloud Infrastructure</option>
+                <option value="Hardware">Hardware & IoT</option>
+            </select>
+        </section>
+
+        <section id="editor">
+            <h2 style="margin-top:0">_ TRANSMISSION_INIT</h2>
+            <form id="article-form">
+                <input type="hidden" id="article-id">
+                <div class="form-grid">
+                    <input type="text" id="titre" placeholder="Titre du Signal" required>
+                    <input type="text" id="auteur" placeholder="Opérateur / Auteur" required>
+                </div>
+                <div class="form-grid">
+                    <input type="date" id="date" required>
+                    <select id="categorie" required>
+                        <option value="" disabled selected>Secteur...</option>
+                        <option value="IA">Intelligence Artificielle</option>
+                        <option value="Dev">Développement Web</option>
+                        <option value="Cyber">Cybersécurité</option>
+                        <option value="Cloud">Cloud Infrastructure</option>
+                        <option value="Hardware">Hardware & IoT</option>
+                    </select>
+                </div>
+                <input type="text" id="tags" placeholder="Tags (ex: neuron, secure, fiber)" style="width: 100%; margin-bottom: 1.5rem;">
+                <textarea id="contenu" placeholder="Détails de la transmission..." required></textarea>
+                <div style="display: flex; gap: 1.5rem; margin-top: 2rem;">
+                    <button type="submit">Executer_Post</button>
+                    <button type="button" class="secondary" onclick="closeEditor()">Abort_Abort</button>
+                </div>
+            </form>
+        </section>
+
+        <section id="articles-list">
+            <div id="articles-container">Récupération des données du serveur...</div>
+        </section>
+    </div>
+
+    <div class="footer">
+        [ID_USER: PHAREL] // INF 222 // 2026
+    </div>
+
+    <script>
+        const API_URL = '/api/articles';
+
+        async function fetchArticles() {
+            const cat = document.getElementById('categoryFilter').value;
+            let url = API_URL;
+            if (cat) url += `?category=${encodeURIComponent(cat)}`;
+
+            try {
+                const res = await fetch(url);
+                const articles = await res.json();
+                renderArticles(articles);
+            } catch (e) {
+                console.error(e);
+                document.getElementById('articles-container').innerHTML = "ERREUR DE CONNECTION AU SERVEUR.";
+            }
+        }
+
+        async function searchArticles() {
+            const query = document.getElementById('searchInput').value;
+            if (!query) return fetchArticles();
+            const res = await fetch(`${API_URL}/search?query=${encodeURIComponent(query)}`);
+            const articles = await res.json();
+            renderArticles(articles);
+        }
+
+        function renderArticles(articles) {
+            const container = document.getElementById('articles-container');
+            container.innerHTML = articles.map(a => `
+                <div class="article-card">
+                    <div class="card-meta">
+                        <span class="category-tag">${a.categorie}</span>
+                        <span class="date-tag">TS: ${a.date}</span>
+                    </div>
+                    <h2>${a.titre}</h2>
+                    <div class="article-content">${a.contenu.substring(0, 250)}${a.contenu.length > 250 ? '...' : ''}</div>
+                    <div class="card-footer">
+                        <div>OP: <strong>${a.auteur}</strong> ${a.tags ? ' // #' + a.tags : ''}</div>
+                        <div class="actions">
+                            <button class="btn-small" onclick="editArticle(${a.id})">Update</button>
+                            <button class="btn-small secondary" onclick="deleteArticle(${a.id})">Purge</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('') || `
+                <div style="text-align: center; padding: 5rem; border: 1px dashed var(--border);">
+                    <p style="font-family: 'JetBrains Mono', monospace; color: var(--text-dim);">// AUCUNE DONNÉE TROUVÉE //</p>
+                </div>
+            `;
+        }
+
+        function prepareAdd() {
+            document.getElementById('article-form').reset();
+            document.getElementById('article-id').value = '';
+            document.getElementById('date').valueAsDate = new Date();
+            document.getElementById('editor').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('editor').offsetTop - 50, behavior: 'smooth' });
+        }
+
+        async function editArticle(id) {
+            const res = await fetch(`${API_URL}/${id}`);
+            const a = await res.json();
+
+            document.getElementById('article-id').value = a.id;
+            document.getElementById('titre').value = a.titre;
+            document.getElementById('auteur').value = a.auteur;
+            document.getElementById('date').value = a.date;
+            document.getElementById('categorie').value = a.categorie;
+            document.getElementById('tags').value = a.tags;
+            document.getElementById('contenu').value = a.contenu;
+
+            document.getElementById('editor').style.display = 'block';
+            window.scrollTo({ top: document.getElementById('editor').offsetTop - 50, behavior: 'smooth' });
+        }
+
+        function closeEditor() {
+            document.getElementById('editor').style.display = 'none';
+        }
+
+        document.getElementById('article-form').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('article-id').value;
+            const data = {
+                titre: document.getElementById('titre').value,
+                auteur: document.getElementById('auteur').value,
+                date: document.getElementById('date').value,
+                categorie: document.getElementById('categorie').value,
+                tags: document.getElementById('tags').value,
+                contenu: document.getElementById('contenu').value
+            };
+
+            const method = id ? 'PUT' : 'POST';
+            const url = id ? `${API_URL}/${id}` : API_URL;
+
+            await fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+
+            closeEditor();
+            fetchArticles();
+        };
+
+        async function deleteArticle(id) {
+            if (!confirm('CONFIRMER LA PURGE DU SIGNAL ?')) return;
+            await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+            fetchArticles();
+        }
+
+        fetchArticles();
+    </script>
+</body>
+</html>
